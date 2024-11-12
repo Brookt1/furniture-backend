@@ -1,0 +1,48 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Furniture {
+  id            Int               @id @default(autoincrement())
+  name          String
+  description   String?
+  price         Float
+  categoryId    Int?
+  averageRating Float             @default(0)
+  category      Categories?       @relation(fields: [categoryId], references: [id])
+  images        FurnitureImages[]
+  reviews       Reviews[]
+}
+
+model FurnitureImages {
+  id          Int       @id @default(autoincrement())
+  furnitureId Int
+  imageUrl    String
+  furniture   Furniture @relation(fields: [furnitureId], references: [id])
+
+  @@index([furnitureId])
+}
+
+model Reviews {
+  id           Int       @id @default(autoincrement())
+  furnitureId  Int
+  reviewerName String?
+  reviewText   String?
+  email        String?
+  rating       Int
+  reviewDate   DateTime  @default(now())
+  furniture    Furniture @relation(fields: [furnitureId], references: [id])
+
+  @@index([furnitureId])
+}
+
+model Categories {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  furniture Furniture[]
+}
