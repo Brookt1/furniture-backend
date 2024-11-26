@@ -20,7 +20,7 @@ exports.getFurnitureById = (req, res) => {
   prisma.furniture
     .findUnique({
       where: { id: furnitureId },
-      include: { reviews: true, furnitureImages: true },
+      include: { reviews: true, images: true },
     })
     .then((furniture) => {
       if (furniture) {
@@ -35,16 +35,23 @@ exports.getFurnitureById = (req, res) => {
 };
 
 exports.addFurniture = async (req, res) => {
-  const { name, description, price, categoryId, imageUrl } = req.body;
+  const { name, description, price, categoryId, imageUrls } = req.body;
   try {
     const furniture = await prisma.furniture.create({
       data: {
         name,
         description,
         price,
-        categoryId,
-        imageUrl,
+        category: {
+          connect: { id: categoryId },
+        },
+        images: {
+          create: imageUrls.map((url) => ({
+            url,
+          })),
+        },
       },
+      include: { category: true, images: true },
     });
     res.json(furniture);
   } catch (err) {

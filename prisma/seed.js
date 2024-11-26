@@ -4,10 +4,10 @@ const prisma = new PrismaClient();
 async function main() {
   const categories = ["Sofa", "Chair", "Table", "Bed", "Cabinet"];
   for (const name of categories) {
-    await prisma.categories.upsert({
-      where: { name },
-      update: {},
-      create: { name },
+    await prisma.category.create({
+      data: {
+        name,
+      },
     });
   }
 

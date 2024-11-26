@@ -8,41 +8,54 @@ generator client {
 }
 
 model Furniture {
-  id            Int               @id @default(autoincrement())
+  id            Int              @id @default(autoincrement())
   name          String
   description   String?
   price         Float
+  averageRating Float            @default(0)
   categoryId    Int?
-  averageRating Float             @default(0)
-  category      Categories?       @relation(fields: [categoryId], references: [id])
-  images        FurnitureImages[]
-  reviews       Reviews[]
+  category      Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull) // Ensure proper onDelete behavior
+  images        FurnitureImage[]
+  reviews       Review[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @default(now()) @updatedAt
 }
 
-model FurnitureImages {
-  id          Int       @id @default(autoincrement())
-  furnitureId Int
-  imageUrl    String
-  furniture   Furniture @relation(fields: [furnitureId], references: [id])
-
-  @@index([furnitureId])
-}
-
-model Reviews {
-  id           Int       @id @default(autoincrement())
-  furnitureId  Int
-  reviewerName String?
-  reviewText   String?
-  email        String?
-  rating       Int
-  reviewDate   DateTime  @default(now())
-  furniture    Furniture @relation(fields: [furnitureId], references: [id])
-
-  @@index([furnitureId])
-}
-
-model Categories {
+model Category {
   id        Int         @id @default(autoincrement())
   name      String      @unique
   furniture Furniture[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+}
+
+model FurnitureImage {
+  id          Int       @id @default(autoincrement())
+  url         String
+  furnitureId Int
+  furniture   Furniture @relation(fields: [furnitureId], references: [id], onDelete: Cascade) // Cascade deletes
+  createdAt   DateTime  @default(now())
+}
+
+model Review {
+  id          Int       @id @default(autoincrement())
+  content     String
+  rating      Int       @default(0)
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  furnitureId Int
+  furniture   Furniture @relation(fields: [furnitureId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  role      String   @default("USER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  Review Review[]
 }
