@@ -5,8 +5,8 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const cors = require("cors");
 dotenv.config();
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello There!");

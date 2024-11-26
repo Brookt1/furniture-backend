@@ -1,7 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const client = new PrismaClient();
 
-const db = require("../config/db");
 
 exports.getCategories = (req, res) => {
   client.category

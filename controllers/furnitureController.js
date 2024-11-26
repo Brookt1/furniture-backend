@@ -4,7 +4,10 @@ const prisma = new PrismaClient();
 
 exports.getAllFurniture = (req, res) => {
   prisma.furniture
-    .findMany()
+    .findMany({
+      // i want to include only one image as a thumbnail
+      include: { images: { take: 1 } },
+    })
     .then((furniture) => {
       res.json(furniture);
     })
