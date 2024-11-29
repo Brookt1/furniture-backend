@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const furnitureRoutes = require("./routes/furnitureRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const cors = require("cors");
+const swaggerSetup = require("./swagger");
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -14,6 +15,13 @@ app.get("/", (req, res) => {
 
 app.use("/api/furniture", furnitureRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/cart", require("./routes/cartRoutes"));
+
+swaggerSetup(app);
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

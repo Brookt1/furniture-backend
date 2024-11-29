@@ -19,6 +19,8 @@ model Furniture {
   reviews       Review[]
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @default(now()) @updatedAt
+
+  Cart Cart[]
 }
 
 model Category {
@@ -58,4 +60,16 @@ model User {
   updatedAt DateTime @default(now()) @updatedAt
 
   Review Review[]
+
+  Cart Cart[]
+}
+
+model Cart {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  furnitureId Int
+  furniture   Furniture @relation(fields: [furnitureId], references: [id], onDelete: Cascade)
+  quantity    Int       @default(1)
+  createdAt   DateTime  @default(now())
 }
