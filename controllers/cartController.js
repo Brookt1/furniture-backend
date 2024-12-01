@@ -32,7 +32,7 @@ exports.addItemToCart = async (req, res) => {
     const { createdAt, ...cartItemWithoutCreatedAt } = cartItem;
     res.status(201).json(cartItemWithoutCreatedAt);
   } catch (error) {
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: error.message });
   }
 };
 
