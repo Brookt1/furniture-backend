@@ -8,7 +8,11 @@ exports.getCartItems = async (req, res) => {
     const cartItems = await prisma.cart.findMany({
       where: { userId },
       include: {
-        furniture: true,
+        furniture: {
+          include: {
+            images: true,
+          },
+        },
       },
     });
     res.json(cartItems);
