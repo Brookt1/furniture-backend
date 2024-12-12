@@ -17,6 +17,7 @@ model Furniture {
   category      Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull) // Ensure proper onDelete behavior
   images        FurnitureImage[]
   reviews       Review[]
+  OrderItem     OrderItem[]
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @default(now()) @updatedAt
 
@@ -35,8 +36,7 @@ model FurnitureImage {
   id          Int       @id @default(autoincrement())
   url         String
   furnitureId Int
-  furniture   Furniture @relation(fields: [furnitureId], references: [id], onDelete: Cascade) // Cascade deletes
-  createdAt   DateTime  @default(now())
+  furniture   Furniture @relation(fields: [furnitureId], references: [id], onDelete: Cascade)
 }
 
 model Review {
@@ -60,8 +60,8 @@ model User {
   updatedAt DateTime @default(now()) @updatedAt
 
   Review Review[]
-
-  Cart Cart[]
+  Order  Order[]
+  Cart   Cart[]
 }
 
 model Cart {
@@ -71,5 +71,26 @@ model Cart {
   furnitureId Int
   furniture   Furniture @relation(fields: [furnitureId], references: [id], onDelete: Cascade)
   quantity    Int       @default(1)
+  createdAt   DateTime  @default(now())
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalAmount Float
+  status      String      @default("PENDING") // Status of the order (e.g., PENDING, COMPLETED, CANCELED)
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+}
+
+model OrderItem {
+  id          Int       @id @default(autoincrement())
+  orderId     Int
+  order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  furnitureId Int
+  furniture   Furniture @relation(fields: [furnitureId], references: [id], onDelete: Cascade)
+  quantity    Int       @default(1)
+  price       Float
   createdAt   DateTime  @default(now())
 }

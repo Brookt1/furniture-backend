@@ -1,7 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const client = new PrismaClient();
 
-
 exports.getCategories = (req, res) => {
   client.category
     .findMany({
@@ -58,7 +57,6 @@ exports.getCategory = (req, res) => {
     });
 };
 
-//TODO: Implement the addCategory controller method
 exports.addCategory = (req, res) => {
   const { name } = req.body;
   client.categories

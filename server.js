@@ -17,6 +17,7 @@ app.use("/api/furniture", furnitureRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/cart", require("./routes/cartRoutes"));
+app.use("/api/order", require("./routes/orderRoutes"));
 
 swaggerSetup(app);
 app.use((req, res) => {
