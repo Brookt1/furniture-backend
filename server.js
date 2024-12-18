@@ -6,6 +6,7 @@ const cors = require("cors");
 const swaggerSetup = require("./swagger");
 const cookieParser = require("cookie-parser");
 dotenv.config();
+
 const app = express();
 
 app.use(cors());
@@ -21,6 +22,8 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/cart", require("./routes/cartRoutes"));
 app.use("/api/order", require("./routes/orderRoutes"));
+
+app.use("/api/review", require("./routes/reviewRoutes"));
 
 swaggerSetup(app);
 app.use((req, res) => {
