@@ -4,10 +4,13 @@ const furnitureRoutes = require("./routes/furnitureRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const cors = require("cors");
 const swaggerSetup = require("./swagger");
+const cookieParser = require("cookie-parser");
 dotenv.config();
 const app = express();
+
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello There!");

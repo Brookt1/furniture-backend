@@ -51,13 +51,14 @@ model Review {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  password  String
-  role      String   @default("USER")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String?
+  password     String
+  refreshToken String   @default("")
+  role         String   @default("USER")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
 
   Review Review[]
   Order  Order[]
