@@ -59,8 +59,8 @@ router.post(
  *           schema:
  *             type: object
  *             properties:
- *              email:
- *                type: string
+ *               email:
+ *                 type: string
  *               password:
  *                 type: string
  *     responses:
