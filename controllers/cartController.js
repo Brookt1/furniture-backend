@@ -3,7 +3,6 @@ const prisma = new PrismaClient();
 
 exports.getCartItems = async (req, res) => {
   try {
-    console.log(req.user);
     const userId = req.user.id;
     const cartItems = await prisma.cart.findMany({
       where: { userId },
@@ -25,11 +24,12 @@ exports.addItemToCart = async (req, res) => {
   const { furnitureId, quantity } = req.body;
   const userId = req.user.id;
 
+  console.log(userId, furnitureId, quantity);
   try {
     const cartItem = await prisma.cart.create({
       data: {
-        userId,
-        furnitureId,
+        user: { connect: { id: userId } }, // Corrected nested create syntax
+        furniture: { connect: { id: furnitureId } }, // Corrected nested create syntax
         quantity,
       },
     });

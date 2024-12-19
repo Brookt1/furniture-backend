@@ -22,3 +22,48 @@ exports.validateLogin = (req, res, next) => {
   if (error) return res.status(400).json({ message: error.details[0].message });
   next();
 };
+
+exports.validateAddCart = (req, res, next) => {
+  const schema = Joi.object({
+    furnitureId: Joi.number().integer().required(),
+    quantity: Joi.number().integer().required(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+  next();
+};
+
+exports.validateAddFurniture = (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    description: Joi.string().required(),
+    imageUrls: Joi.array().items(Joi.string().uri()).required(),
+    price: Joi.number().integer().greater(0).required(),
+    categoryId: Joi.number().integer().required(),
+  });
+  const { error } = schema.validate(req.body);
+
+  if (error) return res.status(400).json({ message: error.details[0].message });
+  next();
+};
+
+exports.validateAddReview = (req, res, next) => {
+  const schema = Joi.object({
+    reviewerName: Joi.string().required(),
+    reviewText: Joi.string().required(),
+    email: Joi.string().email().required(),
+    rating: Joi.number().integer().min(1).max(5).required(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+  next();
+};
+
+exports.validateAddCategory = (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+  next();
+};

@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const ROLES_LIST = require("../config/roles_list");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -20,21 +21,27 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
-
+    const payload = { id: user.id, role: user.role };
     const accessToken = jwt.sign(
-      { email: user.email },
+      {
+        UserInfo: payload,
+      },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" }
+      {
+        expiresIn: "15m",
+      }
     );
 
     const refreshToken = jwt.sign(
-      { email: user.email },
+      { id: user.id },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "30d" }
     );
 
     await prisma.user.update({
-      where: { email: user.email },
+      where: {
+        id: user.id,
+      },
       data: {
         refreshToken: refreshToken,
       },
@@ -77,14 +84,9 @@ exports.register = async (req, res) => {
         name: username,
         email: email,
         password: hashedPassword,
+        role: ROLES_LIST.User,
       },
     });
-
-    const accessToken = jwt.sign(
-      { email: user.email },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" }
-    );
 
     res.status(201).json({
       success: true,
@@ -110,12 +112,16 @@ exports.refreshToken = async (req, res) => {
   if (!foundUser) return res.sendStatus(403);
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err || foundUser.email !== user.email) {
+    if (err || foundUser.id !== user.id) {
       return res.sendStatus(403);
     }
 
+    const payload = { id: user.id, role: foundUser.role };
+
     const accessToken = jwt.sign(
-      { email: user.email },
+      {
+        UserInfo: payload,
+      },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "15m" }
     );
@@ -147,7 +153,7 @@ exports.logout = async (req, res) => {
   }
 
   await prisma.user.update({
-    where: { email: foundUser.email },
+    where: { id: foundUser.id },
 
     data: {
       refreshToken: "",

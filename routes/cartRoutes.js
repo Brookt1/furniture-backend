@@ -1,12 +1,8 @@
 const express = require("express");
 const cartController = require("../controllers/cartController");
+const { validateAddCart } = require("../middleware/validateMiddleware");
 
 const router = express.Router();
-
-router.use((req, res, next) => {
-  req.user = { id: 1 };
-  next();
-});
 
 /**
  * @swagger
@@ -91,7 +87,7 @@ router.get("/", cartController.getCartItems);
  *       500:
  *         description: Internal server error
  */
-router.post("/", cartController.addItemToCart);
+router.post("/", validateAddCart, cartController.addItemToCart);
 
 /**
  * @swagger

@@ -1,5 +1,7 @@
 const express = require("express");
 const orderController = require("../controllers/orderController");
+const { verifyRole } = require("../middleware/authMiddleware");
+const ROLES_LIST = require("../config/roles_list");
 const router = express.Router();
 
 /**
@@ -76,7 +78,11 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
-router.get("/", orderController.getOrders);
+router.get(
+  "/",
+  verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
+  orderController.getOrders
+);
 
 /**
  * @swagger
@@ -152,7 +158,11 @@ router.get("/", orderController.getOrders);
  *       500:
  *         description: Internal server error
  */
-router.get("/:id", orderController.getOrder);
+router.get(
+  "/:id",
+  verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
+  orderController.getOrder
+);
 
 /**
  * @swagger
@@ -258,6 +268,10 @@ router.post("/", orderController.addOrder);
  *       500:
  *         description: Internal server error
  */
-router.delete("/:id", orderController.deleteOrder);
+router.delete(
+  "/:id",
+  verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
+  orderController.deleteOrder
+);
 
 module.exports = router;

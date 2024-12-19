@@ -17,6 +17,50 @@ const options = {
         url: "https://furnitureapi-ykrq.onrender.com",
       },
     ],
+    components: {
+      schemas: {
+        Furniture: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+              description: "The auto-generated id of the furniture",
+            },
+            name: {
+              type: "string",
+              description: "Name of the furniture",
+            },
+            description: {
+              type: "string",
+              description: "Description of the furniture",
+            },
+            price: {
+              type: "number",
+              description: "Price of the furniture",
+            },
+            // Add other properties as needed
+          },
+        },
+        Review: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+              description: "The auto-generated id of the review",
+            },
+            rating: {
+              type: "number",
+              description: "Rating given by the user",
+            },
+            comment: {
+              type: "string",
+              description: "Comment given by the user",
+            },
+            // Add other properties as needed
+          },
+        },
+      },
+    },
   },
   apis: ["./routes/*.js"],
 };

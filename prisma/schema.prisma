@@ -56,7 +56,7 @@ model User {
   name         String?
   password     String
   refreshToken String   @default("")
-  role         String   @default("USER")
+  role         Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now()) @updatedAt
 
@@ -81,6 +81,10 @@ model Order {
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   totalAmount Float
   status      String      @default("PENDING") // Status of the order (e.g., PENDING, COMPLETED, CANCELED)
+  orderBy     String?
+  phone       String?
+  address     String?
+  email       String?
   orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
 }

@@ -43,10 +43,28 @@ exports.getOrder = async (req, res) => {
   }
 };
 exports.addOrder = async (req, res) => {
-  const { orderItems } = req.body;
-  const userId = 1; // Hardcoded user ID for simplicity
+  const { firstName, lastName, email, city, phone, cartId } = req.body;
+  const userId = req.user.id;
 
   try {
+    const cart = await prisma.cart.findUnique({
+      where: { id: cartId },
+      include: {
+        furniture: true,
+      },
+    });
+
+    if (!cart) {
+      return res.status(404).json({ error: "Cart not found" });
+    }
+
+    console.log(cart);
+
+    const orderItems = cart.furniture.map((item) => ({
+      furnitureId: item.id,
+      quantity: item.cartItem.quantity,
+    }));
+
     const furnitureIds = orderItems.map((item) => item.furnitureId);
     const furnitureItems = await prisma.furniture.findMany({
       where: {

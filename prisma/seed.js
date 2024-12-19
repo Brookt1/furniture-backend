@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const ROLES_LIST = require("../config/roles_list");
 const prisma = new PrismaClient();
 
 async function main() {
@@ -11,11 +12,26 @@ async function main() {
     });
   }
 
-  console.log("Database seeded with initial categories.");
+  // Add initial data here
+  await prisma.user.create({
+    data: {
+      email: "admin@example.com",
+      name: "Admin",
+      password: "password",
+      role: ROLES_LIST.SuperAdmin,
+    },
+  });
+
+  // Add more initial data as needed
+
+  console.log("Database seeded with initial categories and user.");
 }
 
 main()
-  .catch((e) => console.error(e))
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
   .finally(async () => {
     await prisma.$disconnect();
   });

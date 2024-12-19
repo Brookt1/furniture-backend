@@ -5,6 +5,8 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const cors = require("cors");
 const swaggerSetup = require("./swagger");
 const cookieParser = require("cookie-parser");
+const { verifyJWT } = require("./middleware/authMiddleware");
+
 dotenv.config();
 
 const app = express();
@@ -20,10 +22,12 @@ app.get("/", (req, res) => {
 app.use("/api/furniture", furnitureRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/cart", require("./routes/cartRoutes"));
-app.use("/api/order", require("./routes/orderRoutes"));
 
-app.use("/api/review", require("./routes/reviewRoutes"));
+// app.use(verifyJWT);
+
+app.use("/api/cart", verifyJWT, require("./routes/cartRoutes"));
+app.use("/api/order", verifyJWT, require("./routes/orderRoutes"));
+app.use("/api/review", verifyJWT, require("./routes/reviewRoutes"));
 
 swaggerSetup(app);
 app.use((req, res) => {
