@@ -4,19 +4,28 @@ const authController = require("../controllers/authController");
 const authMiddleware = require("../middleware/authMiddleware");
 const validateMiddleware = require("../middleware/validateMiddleware");
 const ROLES_LIST = require("../config/roles_list");
-
 /**
  * @swagger
- * tags:
- *   name: Auth
- *   description: Authentication management
+ * components:
+ *   schemas:
+ *     Auth:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
  */
 
 /**
  * @swagger
- * /register:
+ * /api/auth/register:
  *   post:
  *     summary: Register a new user
+ *     description: This endpoint allows a new user to register by providing a username, email, and password.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -44,9 +53,11 @@ router.post(
 
 /**
  * @swagger
- * /login:
+ * /api/auth/login:
  *   post:
  *     summary: Login a user
+ *     description: This endpoint allows a user to login by providing their email and password.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -68,9 +79,11 @@ router.post("/login", validateMiddleware.validateLogin, authController.login);
 
 /**
  * @swagger
- * /refresh:
+ * /api/auth/refresh:
  *   get:
  *     summary: Refresh token
+ *     description: This endpoint allows a user to refresh their authentication token.
+ *     tags: [Auth]
  *     responses:
  *       200:
  *         description: Success
@@ -81,9 +94,11 @@ router.get("/refresh", authController.refreshToken);
 
 /**
  * @swagger
- * /logout:
+ * /api/auth/logout:
  *   get:
  *     summary: Logout a user
+ *     description: This endpoint allows a user to logout.
+ *     tags: [Auth]
  *     responses:
  *       200:
  *         description: Success

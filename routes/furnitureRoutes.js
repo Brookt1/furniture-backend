@@ -6,6 +6,13 @@
  */
 
 /**
+ * @swagger
+ * /api/furniture:
+ *   get:
+ *     summary: Retrieve a list of furniture
+ *     tags: [Furniture]
+ *     responses:
+ *       200:
  *         description: A list of furniture
  *         content:
  *           application/json:
@@ -17,7 +24,7 @@
 
 /**
  * @swagger
- * /{id}:
+ * /api/furniture/{id}:
  *   get:
  *     summary: Retrieve a single piece of furniture by ID
  *     tags: [Furniture]
@@ -41,7 +48,7 @@
 
 /**
  * @swagger
- * /{id}:
+ * /api/furniture/{id}:
  *   delete:
  *     summary: Delete a piece of furniture by ID
  *     tags: [Furniture]
@@ -66,7 +73,7 @@
 
 /**
  * @swagger
- * /:
+ * /api/furniture/:
  *   post:
  *     summary: Add a new piece of furniture
  *     tags: [Furniture]
@@ -90,7 +97,7 @@
 
 /**
  * @swagger
- * /{id}/reviews:
+ * /api/furniture/{id}/reviews:
  *   post:
  *     summary: Add a review to a piece of furniture
  *     tags: [Furniture]

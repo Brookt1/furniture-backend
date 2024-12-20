@@ -38,7 +38,6 @@ const options = {
               type: "number",
               description: "Price of the furniture",
             },
-            // Add other properties as needed
           },
         },
         Review: {
