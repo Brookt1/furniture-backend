@@ -16,7 +16,7 @@ exports.getCartItems = async (req, res) => {
     });
     res.json(cartItems);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -36,7 +36,7 @@ exports.addItemToCart = async (req, res) => {
     const { createdAt, ...cartItemWithoutCreatedAt } = cartItem;
     res.status(201).json(cartItemWithoutCreatedAt);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -51,7 +51,7 @@ exports.updateCartItem = async (req, res) => {
     });
     res.json(cartItem);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -64,6 +64,6 @@ exports.removeItemFromCart = async (req, res) => {
     });
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };

@@ -11,7 +11,7 @@ exports.getAllReviews = async (req, res) => {
 
     res.json(reviews);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -30,6 +30,6 @@ exports.addReview = async (req, res) => {
 
     res.status(201).json(review);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };

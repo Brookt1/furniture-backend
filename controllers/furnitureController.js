@@ -12,7 +12,7 @@ exports.getAllFurniture = (req, res) => {
       res.json(furniture);
     })
     .catch((err) => {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ message: err.message });
     });
 };
 
@@ -28,11 +28,11 @@ exports.getFurnitureById = (req, res) => {
       if (furniture) {
         res.json(furniture);
       } else {
-        res.status(404).json({ error: "Furniture not found" });
+        res.status(404).json({ message: "Furniture not found" });
       }
     })
     .catch((err) => {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ message: err.message });
     });
 };
 
@@ -57,17 +57,17 @@ exports.addFurniture = async (req, res) => {
     });
     res.json(furniture);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
 exports.deleteFurniture = (req, res) => {
   const furnitureId = req.params.id;
   db.run("DELETE FROM Furniture WHERE id = ?", [furnitureId], function (err) {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) return res.status(500).json({ message: err.message });
 
     if (this.changes === 0) {
-      return res.status(404).json({ error: "Furniture not found" });
+      return res.status(404).json({ message: "Furniture not found" });
     }
 
     res.json({ success: true });
@@ -85,7 +85,7 @@ exports.addReview = (req, res) => {
     "INSERT INTO Reviews (furnitureId, reviewerName, reviewText, email, rating) VALUES (?, ?, ?, ?, ?)",
     [furnitureId, reviewerName, reviewText, email, rating],
     function (err) {
-      if (err) return res.status(500).json({ error: err.message });
+      if (err) return res.status(500).json({ message: err.message });
 
       res.json({ id: this.lastID });
     }

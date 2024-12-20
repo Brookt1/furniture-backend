@@ -15,7 +15,7 @@ exports.getOrders = async (req, res) => {
     });
     res.json(orders);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -36,10 +36,10 @@ exports.getOrder = async (req, res) => {
     if (order) {
       res.json(order);
     } else {
-      res.status(404).json({ error: "Order not found" });
+      res.status(404).json({ message: "Order not found" });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 exports.addOrder = async (req, res) => {
@@ -55,7 +55,7 @@ exports.addOrder = async (req, res) => {
     });
 
     if (!cart) {
-      return res.status(404).json({ error: "Cart not found" });
+      return res.status(404).json({ message: "Cart not found" });
     }
 
     console.log(cart);
@@ -105,7 +105,7 @@ exports.addOrder = async (req, res) => {
 
     res.status(201).json(order);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -119,9 +119,9 @@ exports.updateOrder = async (req, res) => {
   //     });
   //     res.json(order);
   //   } catch (error) {
-  //     res.status(500).json({ error: error.message });
+  //     res.status(500).json({ message: error.message });
   //   }
-  res.status(500).json({ error: "Unauthorized access" });
+  res.status(500).json({ message: "Unauthorized access" });
 };
 
 exports.deleteOrder = async (req, res) => {
@@ -134,5 +134,5 @@ exports.deleteOrder = async (req, res) => {
   //     res.status(204).send();
   //   } catch (error) {
   // }
-  res.status(500).json({ error: "Unauthorized access" });
+  res.status(500).json({ message: "Unauthorized access" });
 };

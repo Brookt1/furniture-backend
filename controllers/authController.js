@@ -13,13 +13,13 @@ exports.login = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
     const payload = { id: user.id, role: user.role };
     const accessToken = jwt.sign(
@@ -60,7 +60,7 @@ exports.login = async (req, res) => {
       token: accessToken,
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -73,7 +73,7 @@ exports.register = async (req, res) => {
     });
 
     if (userExists) {
-      return res.status(400).json({ error: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -92,7 +92,7 @@ exports.register = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 

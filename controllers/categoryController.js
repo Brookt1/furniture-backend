@@ -13,7 +13,7 @@ exports.getCategories = (req, res) => {
       res.json(categories);
     })
     .catch((err) => {
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({ message: "Internal server error" });
     });
 };
 
@@ -46,14 +46,14 @@ exports.getCategory = (req, res) => {
       if (category) {
         res.json(category);
       } else {
-        res.status(404).json({ error: "Category not found" });
+        res.status(404).json({ message: "Category not found" });
       }
     })
     .catch((err) => {
       console.log(err);
       res
         .status(500)
-        .json({ error: "An error occurred while retrieving the category" });
+        .json({ message: "An error occurred while retrieving the category" });
     });
 };
 
@@ -69,6 +69,6 @@ exports.addCategory = (req, res) => {
       res.json(category);
     })
     .catch((err) => {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ message: err.message });
     });
 };
