@@ -54,7 +54,7 @@ exports.login = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24 * 30,
     });
 
-    res.json({
+    res.status(201).json({
       name: user.name,
       email: user.email,
       token: accessToken,
@@ -88,9 +88,7 @@ exports.register = async (req, res) => {
       },
     });
 
-    res.status(201).json({
-      success: true,
-    });
+    res.sendStatus(201);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
