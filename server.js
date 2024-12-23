@@ -6,12 +6,17 @@ const cors = require("cors");
 const swaggerSetup = require("./swagger");
 const cookieParser = require("cookie-parser");
 const { verifyJWT } = require("./middleware/authMiddleware");
+const credentials = require("./middleware/credentials");
+const corsOptions = require("./config/corsOption");
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(credentials);
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(cookieParser());
 

@@ -47,10 +47,15 @@ exports.login = async (req, res) => {
       },
     });
 
-    res.cookie("jwt", refreshToken, {
+    const updatedUser = await prisma.user.findUnique({
+      where: { id: user.id },
+    });
+
+    res.cookie("jwt", updatedUser.refreshToken, {
       httpOnly: true,
       sameSite: "none",
       secure: true,
+      partitioned: true,
       maxAge: 1000 * 60 * 60 * 24 * 30,
     });
 
@@ -113,7 +118,6 @@ exports.refreshToken = async (req, res) => {
     if (err || foundUser.id !== user.id) {
       return res.sendStatus(403);
     }
-
     const payload = { id: user.id, role: foundUser.role };
 
     const accessToken = jwt.sign(
@@ -121,10 +125,10 @@ exports.refreshToken = async (req, res) => {
         UserInfo: payload,
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "15s" }
     );
 
-    res.json({ accessToken });
+    res.status(200).json({ token: accessToken });
   });
 };
 
@@ -146,6 +150,7 @@ exports.logout = async (req, res) => {
       httpOnly: true,
       sameSite: "none",
       secure: true,
+      partitioned: true,
     });
     return res.sendStatus(204);
   }
@@ -158,6 +163,11 @@ exports.logout = async (req, res) => {
     },
   });
 
-  res.clearCookie("jwt", { httpOnly: true, sameSite: "none", secure: true });
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+    partitioned: true,
+  });
   res.sendStatus(204);
 };
