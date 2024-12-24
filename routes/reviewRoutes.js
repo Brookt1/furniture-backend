@@ -6,9 +6,13 @@ const { validateAddReview } = require("../middleware/validateMiddleware");
 
 /**
  * @swagger
- * /reviews:
+ * tags:
+ *   name: Reviews
+ *   description: API for managing reviews
+ * /api/review:
  *   post:
  *     summary: Add a new review
+ *     tags: [Reviews]
  *     requestBody:
  *       required: true
  *       content:
@@ -20,9 +24,10 @@ const { validateAddReview } = require("../middleware/validateMiddleware");
  *         description: Review added successfully
  *       400:
  *         description: Invalid input
- * /reviews/{id}:
+ * /api/reviews/{id}:
  *   delete:
  *     summary: Delete a review by ID
+ *     tags: [Reviews]
  *     parameters:
  *       - in: path
  *         name: id
@@ -37,7 +42,6 @@ const { validateAddReview } = require("../middleware/validateMiddleware");
  *         description: Review not found
  */
 
-router.get("/", reviewController.getAllReviews);
 router.post("/", validateAddReview, reviewController.addReview);
 router.delete("/:id", reviewController.deleteReview);
 
