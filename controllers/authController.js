@@ -21,14 +21,16 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const payload = { id: user.id, role: user.role };
+
+    console.log(user);
+    const payload = { id: user.id, role: user.role, username: user.name };
     const accessToken = jwt.sign(
       {
         UserInfo: payload,
       },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "15s",
+        expiresIn: "15m",
       }
     );
 
@@ -52,10 +54,10 @@ exports.login = async (req, res) => {
     });
 
     res.cookie("jwt", updatedUser.refreshToken, {
+      partitioned: true,
       httpOnly: true,
       sameSite: "none",
       secure: true,
-      partitioned: true,
       maxAge: 1000 * 60 * 60 * 24 * 30,
     });
 
@@ -118,14 +120,18 @@ exports.refreshToken = async (req, res) => {
     if (err || foundUser.id !== user.id) {
       return res.sendStatus(403);
     }
-    const payload = { id: user.id, role: foundUser.role };
+    const payload = {
+      id: user.id,
+      role: foundUser.role,
+      username: foundUser.name,
+    };
 
     const accessToken = jwt.sign(
       {
         UserInfo: payload,
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15s" }
+      { expiresIn: "15m" }
     );
 
     res.status(200).json({ token: accessToken });

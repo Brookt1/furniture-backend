@@ -16,19 +16,63 @@ exports.getAllReviews = async (req, res) => {
 };
 
 exports.addReview = async (req, res) => {
-  const { content, rating } = req.body;
-  const { userId } = req.user;
+  const { content, rating, furnitureId } = req.body;
+
+  const userId = req.user.id;
+  const name = req.user.username;
+  console.log(name);
+  console.log(userId);
+  console.log(req.user);
 
   try {
     const review = await client.review.create({
       data: {
         content,
         rating,
-        userId,
+        reviewBy: name,
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+        furniture: {
+          connect: {
+            id: furnitureId,
+          },
+        },
       },
     });
 
     res.status(201).json(review);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteReview = async (req, res) => {
+  const reviewId = req.params.id;
+  try {
+    const review = await client.review.findUnique({
+      where: {
+        id: parseInt(reviewId),
+      },
+    });
+
+    if (!review) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+
+    if (review.userId !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    await client.review.delete({
+      where: {
+        id: parseInt(reviewId),
+      },
+    });
+
+    res.json({ message: "Review deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

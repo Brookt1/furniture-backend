@@ -51,7 +51,7 @@ const options = {
               type: "number",
               description: "Rating given by the user",
             },
-            comment: {
+            content: {
               type: "string",
               description: "Comment given by the user",
             },

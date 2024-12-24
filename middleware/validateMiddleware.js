@@ -67,3 +67,14 @@ exports.validateAddCategory = (req, res, next) => {
   if (error) return res.status(400).json({ message: error.details[0].message });
   next();
 };
+
+exports.validateAddReview = (req, res, next) => {
+  const schema = Joi.object({
+    content: Joi.string().required(),
+    rating: Joi.number().integer().min(1).max(5).required(),
+    furnitureId: Joi.number().integer().required(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+  next();
+};

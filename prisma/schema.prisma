@@ -43,6 +43,7 @@ model Review {
   id          Int       @id @default(autoincrement())
   content     String
   rating      Int       @default(0)
+  reviewBy    String?
   userId      Int
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   furnitureId Int
