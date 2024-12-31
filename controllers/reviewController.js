@@ -16,13 +16,12 @@ exports.getAllReviews = async (req, res) => {
 };
 
 exports.addReview = async (req, res) => {
-  const { content, rating, furnitureId } = req.body;
+  let { content, rating, furnitureId } = req.body;
+  rating = parseInt(rating, 10);
+  furnitureId = parseInt(furnitureId, 10);
 
   const userId = req.user.id;
   const name = req.user.username;
-  console.log(name);
-  console.log(userId);
-  console.log(req.user);
 
   try {
     const review = await client.review.create({

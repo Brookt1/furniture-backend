@@ -146,7 +146,7 @@ router.post(
   "/",
   verifyJWT,
   verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
-  validateAddFurniture,
+  // validateAddFurniture,
   furnitureController.addFurniture
 );
 

@@ -47,17 +47,6 @@ exports.validateAddFurniture = (req, res, next) => {
   next();
 };
 
-exports.validateAddReview = (req, res, next) => {
-  const schema = Joi.object({
-    reviewerName: Joi.string().required(),
-    reviewText: Joi.string().required(),
-    email: Joi.string().email().required(),
-    rating: Joi.number().integer().min(1).max(5).required(),
-  });
-  const { error } = schema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-  next();
-};
 
 exports.validateAddCategory = (req, res, next) => {
   const schema = Joi.object({
@@ -67,6 +56,7 @@ exports.validateAddCategory = (req, res, next) => {
   if (error) return res.status(400).json({ message: error.details[0].message });
   next();
 };
+
 
 exports.validateAddReview = (req, res, next) => {
   const schema = Joi.object({

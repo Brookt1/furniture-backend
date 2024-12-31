@@ -1,6 +1,54 @@
 const { validationResult } = require("express-validator");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const cloudinary = require("cloudinary").v2;
+// const multer = require("multer");
+// const upload = multer({ dest: "uploads/" });
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+
+exports.addFurniture = async (req, res) => {
+  const { name, description, price, categoryId } = req.body;
+  const files = req.files;
+
+  console.log(files);
+  console.log(req.body);
+
+  try {
+    const imageUrls = await Promise.all(
+      
+      files.map((file) =>
+        cloudinary.uploader.upload(file.path).then((result) => result.url)
+      )
+    );
+
+    const furniture = await prisma.furniture.create({
+      data: {
+        name,
+        description,
+        price,
+        category: {
+          connect: { id: categoryId },
+        },
+        images: {
+          create: imageUrls.map((url) => ({
+            url,
+          })),
+        },
+      },
+      include: { category: true, images: true },
+    });
+    res.json(furniture);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 
 exports.getAllFurniture = (req, res) => {
   prisma.furniture
@@ -12,6 +60,7 @@ exports.getAllFurniture = (req, res) => {
       res.json(furniture);
     })
     .catch((err) => {
+
       res.status(500).json({ message: err.message });
     });
 };
@@ -34,31 +83,6 @@ exports.getFurnitureById = (req, res) => {
     .catch((err) => {
       res.status(500).json({ message: err.message });
     });
-};
-
-exports.addFurniture = async (req, res) => {
-  const { name, description, price, categoryId, imageUrls } = req.body;
-  try {
-    const furniture = await prisma.furniture.create({
-      data: {
-        name,
-        description,
-        price,
-        category: {
-          connect: { id: categoryId },
-        },
-        images: {
-          create: imageUrls.map((url) => ({
-            url,
-          })),
-        },
-      },
-      include: { category: true, images: true },
-    });
-    res.json(furniture);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
 };
 
 exports.deleteFurniture = (req, res) => {
