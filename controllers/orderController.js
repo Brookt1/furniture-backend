@@ -43,26 +43,24 @@ exports.getOrder = async (req, res) => {
   }
 };
 exports.addOrder = async (req, res) => {
-  const { firstName, lastName, email, city, phone, cartId } = req.body;
+  const { firstName, lastName, email, city, phone } = req.body;
   const userId = req.user.id;
 
   try {
-    const cart = await prisma.cart.findUnique({
-      where: { id: cartId },
+    const cartItems = await prisma.cart.findMany({
+      where: { userId: userId },
       include: {
         furniture: true,
       },
     });
 
-    if (!cart) {
-      return res.status(404).json({ message: "Cart not found" });
+    if (!cartItems || cartItems.length === 0) {
+      return res.status(404).json({ message: "Cart is empty" });
     }
 
-    console.log(cart);
-
-    const orderItems = cart.furniture.map((item) => ({
-      furnitureId: item.id,
-      quantity: item.cartItem.quantity,
+    const orderItems = cartItems.map((item) => ({
+      furnitureId: item.furnitureId,
+      quantity: item.quantity,
     }));
 
     const furnitureIds = orderItems.map((item) => item.furnitureId);
@@ -82,6 +80,8 @@ exports.addOrder = async (req, res) => {
       return total + itemPrice * item.quantity;
     }, 0);
 
+    //TODO: include the shppiment cost
+
     const order = await prisma.order.create({
       data: {
         userId,
@@ -90,7 +90,8 @@ exports.addOrder = async (req, res) => {
           create: orderItems.map((item) => ({
             furnitureId: item.furnitureId,
             quantity: item.quantity,
-            price: furniturePriceMap[item.furnitureId] * item.quantity, // Store the price of each item
+
+            price: furniturePriceMap[item.furnitureId] * item.quantity,
           })),
         },
       },
