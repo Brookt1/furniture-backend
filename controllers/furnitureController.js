@@ -11,18 +11,18 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 exports.addFurniture = async (req, res) => {
-  const { name, description, price, categoryId } = req.body;
-  const files = req.files;
-
-  console.log(files);
-  console.log(req.body);
-
   try {
+    const { name, description, price, categoryId } = req.body;
+    const files = req.files;
+
+    // Convert files object to array of files, maintaining order
+    const imageFiles = ["image1", "image2", "image3", "image4"]
+      .map((key) => files[key]?.[0])
+      .filter((file) => file); // Remove any undefined/null values
+
     const imageUrls = await Promise.all(
-      
-      files.map((file) =>
+      imageFiles.map((file) =>
         cloudinary.uploader.upload(file.path).then((result) => result.url)
       )
     );
@@ -31,10 +31,8 @@ exports.addFurniture = async (req, res) => {
       data: {
         name,
         description,
-        price,
-        category: {
-          connect: { id: categoryId },
-        },
+        price: parseFloat(price),
+        categoryId: parseInt(categoryId),
         images: {
           create: imageUrls.map((url) => ({
             url,
@@ -43,12 +41,13 @@ exports.addFurniture = async (req, res) => {
       },
       include: { category: true, images: true },
     });
+
     res.json(furniture);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
-
 
 exports.getAllFurniture = (req, res) => {
   prisma.furniture
@@ -60,7 +59,6 @@ exports.getAllFurniture = (req, res) => {
       res.json(furniture);
     })
     .catch((err) => {
-
       res.status(500).json({ message: err.message });
     });
 };

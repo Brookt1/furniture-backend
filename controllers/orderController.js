@@ -13,6 +13,7 @@ exports.getOrders = async (req, res) => {
         },
       },
     });
+
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });

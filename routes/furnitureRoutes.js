@@ -125,6 +125,8 @@
 
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+
 const furnitureController = require("../controllers/furnitureController");
 const { body, validationResult } = require("express-validator");
 const { verifyJWT, verifyRole } = require("../middleware/authMiddleware");
@@ -134,10 +136,19 @@ const {
   validateAddReview,
 } = require("../middleware/validateMiddleware");
 
+const storage = multer.diskStorage({
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 router.get("/", furnitureController.getAllFurniture);
 router.get("/:id", furnitureController.getFurnitureById);
 router.delete(
   "/:id",
+
   verifyJWT,
   verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
   furnitureController.deleteFurniture
@@ -146,7 +157,22 @@ router.post(
   "/",
   verifyJWT,
   verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
-  // validateAddFurniture,
+  upload.fields([
+    { name: "image1", maxCount: 1, required: true }, // Main image (required)
+    { name: "image2", maxCount: 1 }, // Optional
+    { name: "image3", maxCount: 1 }, // Optional
+    { name: "image4", maxCount: 1 }, // Optional
+  ]),
+  (req, res, next) => {
+    // Check if required image1 is present
+    if (!req.files || !req.files["image1"]) {
+      return res
+        .status(400)
+        .json({ message: "Main image (image1) is required" });
+    }
+    next();
+  },
+  validateAddFurniture,
   furnitureController.addFurniture
 );
 
