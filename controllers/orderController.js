@@ -20,7 +20,28 @@ exports.getOrders = async (req, res) => {
   }
 };
 
-exports.getOrder = async (req, res) => {
+exports.getOrdersByUser = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const orders = await prisma.order.findMany({
+      where: { userId },
+      include: {
+        orderItems: {
+          include: {
+            furniture: true,
+          },
+        },
+      },
+    });
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getOrderById = async (req, res) => {
   const orderId = parseInt(req.params.id, 10);
 
   try {

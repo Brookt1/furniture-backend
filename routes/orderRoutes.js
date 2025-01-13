@@ -13,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/order:
+ * /api/order/all:
  *   get:
  *     summary: Get all orders
  *     tags: [Orders]
@@ -79,10 +79,12 @@ const router = express.Router();
  *         description: Internal server error
  */
 router.get(
-  "/",
+  "/all",
   verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
   orderController.getOrders
 );
+
+router.get("/", orderController.getOrdersByUser);
 
 /**
  * @swagger
@@ -161,7 +163,7 @@ router.get(
 router.get(
   "/:id",
   verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
-  orderController.getOrder
+  orderController.getOrderById
 );
 
 /**

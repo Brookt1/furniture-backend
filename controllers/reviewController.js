@@ -50,6 +50,7 @@ exports.addReview = async (req, res) => {
 
 exports.deleteReview = async (req, res) => {
   const reviewId = req.params.id;
+
   try {
     const review = await client.review.findUnique({
       where: {
@@ -61,7 +62,7 @@ exports.deleteReview = async (req, res) => {
       return res.status(404).json({ message: "Review not found" });
     }
 
-    if (review.userId !== req.user.id) {
+    if (review.userId !== req.user.id && req.user.role !== "admin") {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
