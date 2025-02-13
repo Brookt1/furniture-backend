@@ -14,7 +14,7 @@ model Furniture {
   price         Float
   averageRating Float            @default(0)
   categoryId    Int?
-  category      Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull) // Ensure proper onDelete behavior
+  category      Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   images        FurnitureImage[]
   reviews       Review[]
   OrderItem     OrderItem[]
@@ -81,7 +81,7 @@ model Order {
   userId      Int
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   totalAmount Float
-  status      String      @default("PENDING") // Status of the order (e.g., PENDING, COMPLETED, CANCELED)
+  status      String      @default("PENDING")
   orderBy     String?
   phone       String?
   address     String?
