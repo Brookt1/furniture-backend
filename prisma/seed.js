@@ -3,21 +3,12 @@ const ROLES_LIST = require("../config/roles_list");
 const prisma = new PrismaClient();
 
 async function main() {
-  const categories = ["Sofa", "Chair", "Table", "Bed", "Cabinet"];
-  for (const name of categories) {
-    await prisma.category.create({
-      data: {
-        name,
-      },
-    });
-  }
-
   // Add initial data here
   await prisma.user.create({
     data: {
       email: "admin@example.com",
       name: "Admin",
-      password: "password",
+      password: "$2a$10$Y7CADCl53Q3zqgEPnE4YRuMeooE0NpF5NpiK7nRh9tx5IyC2aGTMO", //  password: "password"
       role: ROLES_LIST.SuperAdmin,
     },
   });

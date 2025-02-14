@@ -13,8 +13,8 @@ model Furniture {
   description   String?
   price         Float
   averageRating Float            @default(0)
-  categoryId    Int?
-  category      Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  subCategoryId Int?
+  subCategory   SubCategory?     @relation(fields: [subCategoryId], references: [id], onDelete: SetNull)
   images        FurnitureImage[]
   reviews       Review[]
   OrderItem     OrderItem[]
@@ -25,11 +25,23 @@ model Furniture {
 }
 
 model Category {
-  id        Int         @id @default(autoincrement())
-  name      String      @unique
-  furniture Furniture[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @default(now()) @updatedAt
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  description   String?
+  subCategories SubCategory[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
+}
+
+model SubCategory {
+  id           Int         @id @default(autoincrement())
+  name         String      @unique
+  description  String?
+  categoryId   Int
+  mainCategory Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  furniture    Furniture[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @default(now()) @updatedAt
 }
 
 model FurnitureImage {
