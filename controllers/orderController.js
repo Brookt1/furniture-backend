@@ -9,6 +9,7 @@ exports.getOrders = async (req, res) => {
         orderItems: {
           include: {
             furniture: true,
+            
           },
         },
       },
