@@ -30,7 +30,11 @@ exports.getOrdersByUser = async (req, res) => {
       include: {
         orderItems: {
           include: {
-            furniture: true,
+            furniture: {
+              include: {
+                images: true,
+              },
+            },
           },
         },
       },
@@ -125,6 +129,10 @@ exports.addOrder = async (req, res) => {
           },
         },
       },
+    });
+
+    await prisma.cart.deleteMany({
+      where: { userId },
     });
 
     res.status(201).json(order);
