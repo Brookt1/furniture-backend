@@ -38,7 +38,7 @@ exports.validateAddFurniture = (req, res, next) => {
     name: Joi.string().required(),
     description: Joi.string().required(),
     price: Joi.number().greater(0).required(),
-    categoryId: Joi.number().integer().required(),
+    subCategoryId: Joi.number().integer().required(),
   });
 
   const { error } = schema.validate(req.body);
@@ -49,6 +49,7 @@ exports.validateAddFurniture = (req, res, next) => {
 exports.validateAddCategory = (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().required(),
+    description: Joi.string().required(),
   });
 
   const { error } = schema.validate(req.body);
