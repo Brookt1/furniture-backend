@@ -21,7 +21,11 @@ exports.getCategoryById = async (req, res) => {
       include: {
         subCategories: {
           include: {
-            furniture: true,
+            furniture: {
+              include: {
+                images: true,
+              },
+            },
           },
         },
       },
@@ -82,6 +86,28 @@ exports.createSubCategory = async (req, res) => {
       },
     });
     res.status(201).json(subCategory);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getSubCategoryById = async (req, res) => {
+  try {
+    const subCategory = await prisma.subCategory.findUnique({
+      where: { id: parseInt(req.params.id) },
+      include: {
+        category: true,
+        furniture: {
+          include: {
+            images: true,
+          },
+        },
+      },
+    });
+    if (!subCategory) {
+      return res.status(404).json({ message: "SubCategory not found" });
+    }
+    res.json(subCategory);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

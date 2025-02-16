@@ -83,16 +83,18 @@ exports.getFurnitureById = (req, res) => {
 };
 
 exports.deleteFurniture = (req, res) => {
-  const furnitureId = req.params.id;
-  db.run("DELETE FROM Furniture WHERE id = ?", [furnitureId], function (err) {
-    if (err) return res.status(500).json({ message: err.message });
+  const furnitureId = parseInt(req.params.id, 10);
 
-    if (this.changes === 0) {
-      return res.status(404).json({ message: "Furniture not found" });
-    }
-
-    res.json({ success: true });
-  });
+  prisma.furniture
+    .delete({
+      where: { id: furnitureId },
+    })
+    .then(() => {
+      res.json({ message: "Furniture deleted" });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
 };
 
 exports.addReview = (req, res) => {
