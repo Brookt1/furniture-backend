@@ -13,7 +13,7 @@ cloudinary.config({
 
 exports.addFurniture = async (req, res) => {
   try {
-    const { name, description, price, subCategoryId } = req.body;
+    const { name, description, price, categoryId } = req.body;
     const files = req.files;
 
     // Convert files object to array of files, maintaining order
@@ -32,14 +32,14 @@ exports.addFurniture = async (req, res) => {
         name,
         description,
         price: parseFloat(price),
-        subCategoryId: parseInt(subCategoryId),
+        categoryId: parseInt(categoryId),
         images: {
           create: imageUrls.map((url) => ({
             url,
           })),
         },
       },
-      include: { subCategory: true, images: true },
+      include: { category: true, images: true },
     });
 
     res.json(furniture);
