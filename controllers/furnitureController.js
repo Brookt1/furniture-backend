@@ -13,7 +13,7 @@ cloudinary.config({
 
 exports.addFurniture = async (req, res) => {
   try {
-    const { name, description, price, categoryId } = req.body;
+    const { name, description, price, subCategoryId } = req.body;
     const files = req.files;
 
     // Convert files object to array of files, maintaining order
@@ -32,14 +32,14 @@ exports.addFurniture = async (req, res) => {
         name,
         description,
         price: parseFloat(price),
-        categoryId: parseInt(categoryId),
+        subCategoryId: parseInt(subCategoryId),
         images: {
           create: imageUrls.map((url) => ({
             url,
           })),
         },
       },
-      include: { category: true, images: true },
+      include: { subCategory: true, images: true },
     });
 
     res.json(furniture);
@@ -52,7 +52,6 @@ exports.addFurniture = async (req, res) => {
 exports.getAllFurniture = (req, res) => {
   prisma.furniture
     .findMany({
-      // i want to include only one image as a thumbnail
       include: { images: { take: 1 } },
     })
     .then((furniture) => {
