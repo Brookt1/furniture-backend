@@ -35,6 +35,8 @@ router.delete(
   categoryController.deleteCategory
 );
 
+// subcategories routes
+
 router.post(
   "/subcategory",
   verifyJWT,
@@ -42,6 +44,8 @@ router.post(
   validateAddSubCategory,
   categoryController.createSubCategory
 );
+
+router.get("/subcategory/:id", categoryController.getSubCategoryById);
 
 router.put(
   "/subcategory/:id",
