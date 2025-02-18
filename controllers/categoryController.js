@@ -96,7 +96,6 @@ exports.getSubCategoryById = async (req, res) => {
     const subCategory = await prisma.subCategory.findUnique({
       where: { id: parseInt(req.params.id) },
       include: {
-        category: true,
         furniture: {
           include: {
             images: true,
