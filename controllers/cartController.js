@@ -24,7 +24,6 @@ exports.addItemToCart = async (req, res) => {
   const { furnitureId, quantity } = req.body;
   const userId = req.user.id;
 
-  console.log(userId, furnitureId, quantity);
   try {
     const cartItem = await prisma.cart.create({
       data: {

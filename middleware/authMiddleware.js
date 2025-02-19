@@ -16,12 +16,8 @@ exports.verifyJWT = (req, res, next) => {
 exports.verifyRole = (...allowedRoles) => {
   return (req, res, next) => {
     try {
-      console.log(req.user);
-      console.log(allowedRoles);
-      console.log(req.user);
       if (!allowedRoles.includes(req.user.role)) return res.sendStatus(401);
     } catch (e) {
-      console.log(e);
       return res.sendStatus(401);
     }
     // if we have roles more than one
