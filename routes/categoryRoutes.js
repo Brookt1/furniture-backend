@@ -24,7 +24,6 @@ router.put(
   "/:id",
   verifyJWT,
   verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
-  validateAddCategory,
   categoryController.updateCategory
 );
 
@@ -51,7 +50,6 @@ router.put(
   "/subcategory/:id",
   verifyJWT,
   verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
-  validateAddSubCategory,
   categoryController.updateSubCategory
 );
 

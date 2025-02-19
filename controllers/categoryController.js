@@ -53,10 +53,14 @@ exports.createCategory = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    const updateData = {};
+    if (req.body.name !== undefined) updateData.name = req.body.name;
+    if (req.body.description !== undefined)
+      updateData.description = req.body.description;
+
     const category = await prisma.category.update({
       where: { id: parseInt(req.params.id) },
-      data: { name },
+      data: updateData,
     });
     res.json(category);
   } catch (error) {
@@ -114,10 +118,16 @@ exports.getSubCategoryById = async (req, res) => {
 
 exports.updateSubCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    const updateData = {};
+    if (req.body.name !== undefined) updateData.name = req.body.name;
+    if (req.body.description !== undefined)
+      updateData.description = req.body.description;
+    if (req.body.categoryId !== undefined)
+      updateData.categoryId = parseInt(req.body.categoryId);
+
     const subCategory = await prisma.subCategory.update({
       where: { id: parseInt(req.params.id) },
-      data: { name },
+      data: updateData,
     });
     res.json(subCategory);
   } catch (error) {
