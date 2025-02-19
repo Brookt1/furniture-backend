@@ -49,6 +49,31 @@ exports.addFurniture = async (req, res) => {
   }
 };
 
+exports.updateFurniture = async (req, res) => {
+  const furnitureId = parseInt(req.params.id, 10);
+  const { name, description, price, subCategoryId } = req.body;
+
+  try {
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (description !== undefined) updateData.description = description;
+    if (price !== undefined) updateData.price = parseFloat(price);
+    if (subCategoryId !== undefined)
+      updateData.subCategoryId = parseInt(subCategoryId);
+
+    const updatedFurniture = await prisma.furniture.update({
+      where: { id: furnitureId },
+      data: updateData,
+      include: { subCategory: true, images: true },
+    });
+
+    res.json(updatedFurniture);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.getAllFurniture = (req, res) => {
   prisma.furniture
     .findMany({
