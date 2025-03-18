@@ -16,7 +16,7 @@ A RESTful API backend for a furniture e-commerce platform built with Node.js and
 
 - Node.js
 - Express.js
-- MongoDB (assumed from project structure)
+- SQLite
 - JWT Authentication
 - Swagger for API documentation
 
@@ -24,7 +24,7 @@ A RESTful API backend for a furniture e-commerce platform built with Node.js and
 
 - Node.js (v14+ recommended)
 - npm or yarn
-- MongoDB database
+- SQLite database
 
 ## Installation
 
@@ -141,8 +141,4 @@ The API returns appropriate HTTP status codes along with JSON error messages.
 
 ## Contributors
 
-- [Your Name]
-
-## Contact
-
-For any inquiries, please reach out to [your-email@example.com]
+- Biruk Tesfaye
