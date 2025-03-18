@@ -135,7 +135,6 @@ const {
   validateAddFurniture,
   validateAddReview,
 } = require("../middleware/validateMiddleware");
-const { route } = require("./orderRoutes");
 
 const storage = multer.diskStorage({
   filename: function (req, file, cb) {
@@ -177,19 +176,6 @@ router.post(
   furnitureController.addFurniture
 );
 
-router.put(
-  "/:id",
-  verifyJWT,
-  verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
-  upload.fields([
-    { name: "image1", maxCount: 1 }, // Main image (optional)
-    { name: "image2", maxCount: 1 }, // Optional
-    { name: "image3", maxCount: 1 }, // Optional
-    { name: "image4", maxCount: 1 }, // Optional
-  ]),
-  furnitureController.updateFurniture
-);
-
 router.post(
   "/:id/reviews",
   verifyJWT,
@@ -197,11 +183,7 @@ router.post(
   furnitureController.addReview
 );
 
-router.delete(
-  "/:id",
-  verifyJWT,
-  verifyRole(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
-  furnitureController.deleteFurniture
-);
+// router.put('/:id', furnitureController.updateFurniture);
+// router.delete('/:id', furnitureController.deleteFurniture);
 
 module.exports = router;

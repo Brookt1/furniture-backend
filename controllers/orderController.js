@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { get } = require("../routes/orderRoutes");
 const prisma = new PrismaClient();
 
 exports.getOrders = async (req, res) => {
@@ -8,6 +9,7 @@ exports.getOrders = async (req, res) => {
         orderItems: {
           include: {
             furniture: true,
+            
           },
         },
       },
